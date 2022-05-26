@@ -1,0 +1,6 @@
+<configuracion>
+	<columna id="0" size="12" posX="32" posY="16" correo="no" nombre="si"></columna>
+	<columna id="1" size="8" posX="52" posY="28" correo="no" nombre="no"></columna>
+	<columna id="2" size="8" posX="10" posY="10" correo="no" nombre="no"></columna>
+	<columna id="3" size="12" posX="1" posY="64" correo="no" nombre="no"></columna>
+</configuracion>

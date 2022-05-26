@@ -1,0 +1,2 @@
+la fuente en el combobox
+hacer que las coordenadas se repitan las veces del contador
