@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>799</width>
+    <width>782</width>
     <height>550</height>
    </rect>
   </property>
@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(:/prefijoNuevo/280889_original_4320x7680.jpg);</string>
+     <string notr="true">image: url(:/imagen_bienvenido/280889_original_4320x7680.jpg);</string>
     </property>
     <property name="text">
      <string/>
@@ -109,55 +109,73 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>330</x>
       <y>240</y>
-      <width>391</width>
-      <height>17</height>
+      <width>401</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>DejaVu Sans</family>
-      <pointsize>13</pointsize>
+      <pointsize>12</pointsize>
      </font>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
     </property>
     <property name="text">
-     <string>Selecciona unas de las siguientes opciones:</string>
+     <string>Dexcel es una app con la que podrás generar tus </string>
     </property>
    </widget>
-   <widget class="QSplitter" name="splitter">
+   <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>280</y>
-      <width>192</width>
-      <height>78</height>
+      <x>330</x>
+      <y>270</y>
+      <width>421</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>DejaVu Sans</family>
-      <pointsize>13</pointsize>
+      <pointsize>12</pointsize>
      </font>
     </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
     </property>
-    <widget class="QRadioButton" name="sencillo_radio">
-     <property name="text">
-      <string>Sencillo</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="avanzado_radio">
-     <property name="text">
-      <string>Avanzado</string>
-     </property>
-    </widget>
+    <property name="text">
+     <string>documentos con mucha facilidad, de forma rápida</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>300</y>
+      <width>421</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>DejaVu Sans</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
+    <property name="text">
+     <string>y de forma seguridad</string>
+    </property>
    </widget>
   </widget>
  </widget>
  <resources>
-  <include location="source.qrc"/>
+  <include location="imagen_bienvenido.qrc"/>
  </resources>
  <connections/>
 </ui>

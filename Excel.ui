@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1134</width>
-    <height>778</height>
+    <height>830</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,7 +39,7 @@
    <property name="geometry">
     <rect>
      <x>1030</x>
-     <y>740</y>
+     <y>790</y>
      <width>101</width>
      <height>25</height>
     </rect>
@@ -58,7 +58,7 @@
    <property name="geometry">
     <rect>
      <x>920</x>
-     <y>740</y>
+     <y>790</y>
      <width>91</width>
      <height>25</height>
     </rect>
@@ -79,7 +79,7 @@
      <x>10</x>
      <y>80</y>
      <width>1121</width>
-     <height>641</height>
+     <height>701</height>
     </rect>
    </property>
    <property name="font">
@@ -106,7 +106,7 @@
        <x>10</x>
        <y>70</y>
        <width>1101</width>
-       <height>531</height>
+       <height>571</height>
       </rect>
      </property>
     </widget>
@@ -186,7 +186,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>40</y>
+       <y>200</y>
        <width>221</width>
        <height>21</height>
       </rect>
@@ -206,7 +206,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>250</y>
        <width>479</width>
        <height>117</height>
       </rect>
@@ -230,7 +230,7 @@
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">image: url(:/prefijoNuevo/601137-200.png);</string>
         </property>
         <property name="text">
          <string/>
@@ -247,18 +247,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Elije el tipo de fuente:</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_6">
         <property name="font">
@@ -268,6 +256,18 @@
         </property>
         <property name="text">
          <string>Color de la fuente:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Elije el tipo de fuente:</string>
         </property>
        </widget>
       </item>
@@ -335,9 +335,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QComboBox" name="comboBox_fontsize"/>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="font">
@@ -350,15 +347,18 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QComboBox" name="comboBox_fontsize"/>
+      </item>
      </layout>
     </widget>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>360</y>
-       <width>681</width>
-       <height>191</height>
+       <y>80</y>
+       <width>631</width>
+       <height>101</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
@@ -442,39 +442,13 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <property name="spacing">
-         <number>28</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="label_9">
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Selecciona las coordenadas:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="carga_imagen_2">
-          <property name="text">
-           <string>Conseguir Coordenadas</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
     <widget class="QLineEdit" name="lineEdit_2">
      <property name="geometry">
       <rect>
        <x>730</x>
-       <y>110</y>
+       <y>90</y>
        <width>371</width>
        <height>251</height>
       </rect>
@@ -484,7 +458,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>310</y>
+       <y>40</y>
        <width>251</width>
        <height>21</height>
       </rect>
@@ -504,8 +478,8 @@
      <property name="geometry">
       <rect>
        <x>730</x>
-       <y>70</y>
-       <width>91</width>
+       <y>40</y>
+       <width>291</width>
        <height>21</height>
       </rect>
      </property>
@@ -517,7 +491,81 @@
       </font>
      </property>
      <property name="text">
-      <string>Resumen</string>
+      <string>Esta es tu imagen seleccionada</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>390</y>
+       <width>481</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(192, 191, 188);
+background-color: rgb(246, 245, 244);</string>
+     </property>
+     <property name="text">
+      <string>Este es tu texto</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>600</y>
+       <width>511</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>28</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_9">
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Selecciona las coordenadas:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="carga_imagen_2">
+        <property name="text">
+         <string>Conseguir Coordenadas</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QLabel" name="label_14">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>560</y>
+       <width>301</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Configuración de los parámetros</string>
      </property>
     </widget>
    </widget>
@@ -532,7 +580,6 @@
  </customwidgets>
  <resources>
   <include location="color_picker.qrc"/>
-  <include location="borde.qrc"/>
  </resources>
  <connections/>
 </ui>

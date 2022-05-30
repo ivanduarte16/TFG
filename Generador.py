@@ -10,6 +10,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialo
 from Bienvenido import Bienvenido
 from CheckableComboBox import CheckableComboBox
 from Excel import Ui_Dialog
+from configuracion import Ui_MainWindow
 
 
 class Welcome(QMainWindow):
@@ -41,12 +42,9 @@ class Welcome(QMainWindow):
         """
         Función que cambiará a una ventana o a otra en función del radiobutton seleccionado
         """
-        if self.ui_entrada.sencillo_radio.isChecked():
-            self.windowExcel = Excel()
-            self.windowExcel.show()
-            self.close()
-        elif self.ui_entrada.avanzado_radio.isChecked():
-            print("Avanzado")
+        self.windowExcel = Excel()
+        self.windowExcel.show()
+        self.close()
 
     def salir(self):
         """
@@ -71,6 +69,14 @@ class Welcome(QMainWindow):
         self.move(fg.topLeft())
 
 
+class Configuracion(QMainWindow):
+    def __init__(self):
+        super(Configuracion, self).__init__()
+
+        self.configuracion = Ui_MainWindow()
+        self.configuracion.setupUi(self)
+
+
 class Excel(QMainWindow):
 
     def __init__(self):
@@ -78,6 +84,7 @@ class Excel(QMainWindow):
 
         PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))  # Quitar si no tienes carpeta de recursos
 
+        self.configuracion = None
         self.items = []
         self.posiciones = []
         self.contador = 0
@@ -88,9 +95,11 @@ class Excel(QMainWindow):
         self.columnas = None
         self.welcome = None
         self.direccion = None
+
         self.ui_excel = Ui_Dialog()
         self.ui_excel.setupUi(self)
 
+        # Creamos un diccionario para que acceda con la llave del combobox
         self.fuentes = {
             "FONT_HERSHEY_SIMPLEX": cv2.FONT_HERSHEY_SIMPLEX,
             "FONT_HERSHEY_PLAIN": cv2.FONT_HERSHEY_PLAIN,
@@ -253,7 +262,10 @@ class Excel(QMainWindow):
         En esta función se mostrará la imagen con el tamaño ya escalado
         """
         cv2.imshow("image", self.escaled())
+        self.configuracion = Configuracion()
+        self.configuracion.show()
         cv2.setMouseCallback("image", self.click_event)
+
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
