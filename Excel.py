@@ -56,7 +56,7 @@ class Ui_Dialog(object):
         self.tabla.setObjectName(u"tabla")
         self.tableWidget = QTableWidget(self.tabla)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setGeometry(QRect(10, 70, 1101, 571))
+        self.tableWidget.setGeometry(QRect(10, 110, 1101, 551))
         self.obtener_info = QPushButton(self.tabla)
         self.obtener_info.setObjectName(u"obtener_info")
         self.obtener_info.setGeometry(QRect(940, 20, 171, 31))
@@ -83,6 +83,9 @@ class Ui_Dialog(object):
 
         self.horizontalLayout.addWidget(self.carga_excel)
 
+        self.pushButton_3 = QPushButton(self.tabla)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.pushButton_3.setGeometry(QRect(10, 60, 131, 25))
         self.qtab.addTab(self.tabla, "")
         self.imagen = QWidget()
         self.imagen.setObjectName(u"imagen")
@@ -284,6 +287,7 @@ class Ui_Dialog(object):
         self.obtener_info.setText(QCoreApplication.translate("Dialog", u"Obtener informaci\u00f3n", None))
         self.label_5.setText(QCoreApplication.translate("Dialog", u"Selecciona la tabla:", None))
         self.carga_excel.setText(QCoreApplication.translate("Dialog", u"Abrir Tabla", None))
+        self.pushButton_3.setText(QCoreApplication.translate("Dialog", u"Seleccionar todo", None))
         self.qtab.setTabText(self.qtab.indexOf(self.tabla), QCoreApplication.translate("Dialog", u"Tabla", None))
         self.label_3.setText(QCoreApplication.translate("Dialog", u"Configuraci\u00f3n del texto", None))
         self.pushButton.setText("")

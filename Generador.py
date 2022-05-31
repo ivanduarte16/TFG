@@ -88,6 +88,7 @@ class Excel(QMainWindow):
 
         PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))  # Quitar si no tienes carpeta de recursos
 
+        self.file = None
         self.jpg = None
         self.porcentaje = None
         self.tmp = None
@@ -170,6 +171,9 @@ class Excel(QMainWindow):
 
         # Rellenamos el combobox de las fuentes
         self.rellenar_fuentes()
+
+        # Conectamos con la función para seleccionar todos los campos de la tabla
+        self.ui_excel.pushButton_3.clicked.connect(self.select_all_checkboxes)
 
     def center(self):
         """
@@ -338,12 +342,22 @@ class Excel(QMainWindow):
                 print([self.ui_excel.tableWidget.item(row, col).text() for col in
                        range(self.ui_excel.tableWidget.columnCount())])
 
+    def select_all_checkboxes(self):
+        """
+        Función para seleccionar o deseleccionar todos los campos de la tabla
+        """
+        for row in range(self.ui_excel.tableWidget.rowCount()):
+            if self.ui_excel.tableWidget.item(row, 0).checkState() == Qt.CheckState.Unchecked:
+                self.ui_excel.tableWidget.item(row, 0).setCheckState(Qt.CheckState.Checked)
+            else:
+                self.ui_excel.tableWidget.item(row, 0).setCheckState(Qt.CheckState.Unchecked)
+
     def open_excel(self):
         """
         Función que se encargará de buscar archivos excel y rellenar nuestra tabla
         """
-        file = QFileDialog.getOpenFileName(self, "Abrir Archivo Excel", "", "Excel Files (*.xlsx) ;; All Files (*)")
-        self.direccion = file[0]
+        self.file = QFileDialog.getOpenFileName(self, "Abrir Archivo Excel", "", "Excel Files (*.xlsx) ;; All Files (*)")
+        self.direccion = self.file[0]
 
         try:
             df = pd.read_excel(self.direccion)
