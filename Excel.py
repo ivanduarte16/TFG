@@ -224,16 +224,13 @@ class Ui_Dialog(object):
 
         self.gridLayout_2.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
 
-        self.lineEdit_2 = QLineEdit(self.imagen)
-        self.lineEdit_2.setObjectName(u"lineEdit_2")
-        self.lineEdit_2.setGeometry(QRect(730, 90, 371, 251))
         self.label_11 = QLabel(self.imagen)
         self.label_11.setObjectName(u"label_11")
         self.label_11.setGeometry(QRect(10, 40, 251, 21))
         self.label_11.setFont(font3)
         self.label_12 = QLabel(self.imagen)
         self.label_12.setObjectName(u"label_12")
-        self.label_12.setGeometry(QRect(730, 40, 291, 21))
+        self.label_12.setGeometry(QRect(720, 50, 291, 21))
         self.label_12.setFont(font3)
         self.label_13 = QLabel(self.imagen)
         self.label_13.setObjectName(u"label_13")
@@ -263,6 +260,12 @@ class Ui_Dialog(object):
         self.label_14.setObjectName(u"label_14")
         self.label_14.setGeometry(QRect(10, 560, 301, 21))
         self.label_14.setFont(font3)
+        self.label_15 = QLabel(self.imagen)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setGeometry(QRect(720, 80, 381, 331))
+        self.label_15.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.label_15.setScaledContents(False)
+        self.label_15.setAlignment(Qt.AlignCenter)
         self.qtab.addTab(self.imagen, "")
 
         self.retranslateUi(Dialog)
@@ -307,5 +310,6 @@ class Ui_Dialog(object):
         self.label_9.setText(QCoreApplication.translate("Dialog", u"Selecciona las coordenadas:", None))
         self.carga_imagen_2.setText(QCoreApplication.translate("Dialog", u"Conseguir Coordenadas", None))
         self.label_14.setText(QCoreApplication.translate("Dialog", u"Configuraci\u00f3n de los par\u00e1metros", None))
+        self.label_15.setText("")
         self.qtab.setTabText(self.qtab.indexOf(self.imagen), QCoreApplication.translate("Dialog", u"Imagen", None))
     # retranslateUi

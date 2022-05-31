@@ -8,12 +8,16 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
-                            Qt)
-from PySide6.QtGui import (QFont, QPixmap)
-from PySide6.QtWidgets import (QLabel, QPushButton,
-                               QWidget)
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton,
+    QSizePolicy, QWidget)
+import imagen_fondo
 
 class Bienvenido(object):
     def setupUi(self, MainWindow):
@@ -72,7 +76,6 @@ class Bienvenido(object):
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
-
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -82,9 +85,8 @@ class Bienvenido(object):
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Documentos", None))
         self.next_button.setText(QCoreApplication.translate("MainWindow", u"Siguiente >", None))
         self.cancel_button.setText(QCoreApplication.translate("MainWindow", u"Cancelar", None))
-        self.label_4.setText(
-            QCoreApplication.translate("MainWindow", u"Dexcel es una app con la que podr\u00e1s generar tus ", None))
-        self.label_6.setText(
-            QCoreApplication.translate("MainWindow", u"documentos con mucha facilidad, de forma r\u00e1pida", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Dexcel es una app con la que podr\u00e1s generar tus ", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"documentos con mucha facilidad, de forma r\u00e1pida", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"y de forma seguridad", None))
     # retranslateUi
+

@@ -1,16 +1,20 @@
 import os
+import tkinter as tk
 
 import cv2
+import imutils
 import pandas as pd
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtGui
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QScreen, QAction, QKeySequence, QIcon
+from PySide6.QtGui import QScreen, QAction, QKeySequence, QIcon, QImage
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog, QTableWidgetItem
 
 from Bienvenido import Bienvenido
 from CheckableComboBox import CheckableComboBox
 from Excel import Ui_Dialog
 from configuracion import Ui_MainWindow
+
+root = tk.Tk()
 
 
 class Welcome(QMainWindow):
@@ -84,6 +88,11 @@ class Excel(QMainWindow):
 
         PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))  # Quitar si no tienes carpeta de recursos
 
+        self.jpg = None
+        self.porcentaje = None
+        self.tmp = None
+        self.pixmap = None
+        self.ventana = None
         self.configuracion = None
         self.items = []
         self.posiciones = []
@@ -207,6 +216,15 @@ class Excel(QMainWindow):
         """
         img = QFileDialog.getOpenFileName(self, "Abrir Imágenes", "", "Image Files (*.png *.jpg *jpeg)")
         self.ui_excel.lineEdit.setText(str(img[0]))
+        self.jpg = cv2.imread(img[0])
+        self.setPhoto(self.jpg)
+
+    def setPhoto(self, image):
+        self.tmp = image
+        image = imutils.resize(image, width=381)
+        frame = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = QImage(frame, frame.shape[1], frame.shape[0], frame.strides[0], QImage.Format_RGB888)
+        self.ui_excel.label_15.setPixmap(QtGui.QPixmap.fromImage(image))
 
     def open_image(self):
         """
@@ -235,11 +253,14 @@ class Excel(QMainWindow):
         """
         checked_items = self.ui_excel.comboBox.get_checked_items()
         if event == cv2.EVENT_LBUTTONDOWN and self.contador < len(checked_items):
-            print('Coordenadas: ', x * 2, ',', y * 2)
-            strxy = str(x * 2) + ',' + str(y * 2)
+            ejeX = x
+            ejeY = y
+
+            print('Coordenadas: ', ejeX, ',', ejeY)
+            strxy = str(ejeX) + ',' + str(ejeY)
             fuente = self.ui_excel.comboBox_font.currentText()
             texto = self.items[checked_items[self.contador]]
-            cv2.putText(self.imagen, texto, (x * 2, y * 2),
+            cv2.putText(self.imagen, texto, (int((x * 100) / self.porcentaje), int((y * 100) / self.porcentaje)),
                         self.fuentes[fuente],
                         int(self.ui_excel.comboBox_fontsize.currentText()), self.convertido,
                         2)
@@ -248,13 +269,36 @@ class Excel(QMainWindow):
 
     def escaled(self):
         """
-        Archivo que guardará la configuracion según elijamos un escalado para la imagen
-        :return: Devolverá la imagen escalada
+        Archivo que guardará la configuracion del escalado para la imagen
+        :return: Devolverá los parámetros de la imagen escalada
         """
-        porcentaje = 50
-        altura = int(self.imagen.shape[0] * porcentaje / 100)
-        ancho = int(self.imagen.shape[1] * porcentaje / 100)
+
+        # Dimensiones originales
+        height = int(self.imagen.shape[0])
+        widht = int(self.imagen.shape[1])
+
+        # Dimensiones de mi pantalla
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+
+        # Escalado de mi pantalla
+        escalado_width = (65 * screen_width) / 100
+        escaldo_height = (65 * screen_height) / 100
+
+        # Porcentaje de las dimensiones de la imagen relativas a mi pantalla
+        self.porcentaje = 0
+
+        # Comprobamos que lado es más grande para hacer la regla de tres
+        if height > widht:
+            self.porcentaje = (escaldo_height * 100) / height
+        elif widht > height:
+            self.porcentaje = (escalado_width * 100) / widht
+
+        # Calculamos la altura y el ancho de la imagen aplicándole el porcentaje
+        altura = int(self.imagen.shape[0] * self.porcentaje / 100)
+        ancho = int(self.imagen.shape[1] * self.porcentaje / 100)
         tamaño = (ancho, altura)
+
         return cv2.resize(self.imagen, tamaño, interpolation=cv2.INTER_AREA)
 
     def configuration(self):
@@ -266,8 +310,15 @@ class Excel(QMainWindow):
         self.configuracion.show()
         cv2.setMouseCallback("image", self.click_event)
 
+        wait_time = 1000
+        # Si cerramos la ventana se cerrará la ventana de confi
+        while cv2.getWindowProperty('image', cv2.WND_PROP_VISIBLE) >= 1:
+            keyCode = cv2.waitKey(wait_time)
+            if (keyCode & 0xFF) == ord("q"):
+                self.configuracion.close()
+                cv2.destroyAllWindows()
+                break
         cv2.waitKey(0)
-        cv2.destroyAllWindows()
 
     def color_picker(self):
         """
