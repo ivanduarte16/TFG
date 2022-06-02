@@ -6,12 +6,13 @@ import imutils
 import pandas as pd
 from PySide6 import QtWidgets, QtGui
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QScreen, QAction, QKeySequence, QIcon, QImage
+from PySide6.QtGui import QScreen, QAction, QKeySequence, QImage
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog, QTableWidgetItem
 
 from Bienvenido import Bienvenido
 from CheckableComboBox import CheckableComboBox
 from Excel import Ui_Dialog
+from Parametros import Parametros
 from configuracion import Ui_MainWindow
 
 root = tk.Tk()
@@ -74,11 +75,70 @@ class Welcome(QMainWindow):
 
 
 class Configuracion(QMainWindow):
-    def __init__(self):
+    def __init__(self, mainwindow):
         super(Configuracion, self).__init__()
+
+        self.setWindowTitle("Configuracion")
+
+        # Importamos la clase principal del programa para poder acceder a sus variables y modificarlas
+        self.main_window: Excel = mainwindow
 
         self.configuracion = Ui_MainWindow()
         self.configuracion.setupUi(self)
+
+        self.convertido = None
+        self.color = None
+
+        # Selector de color
+        self.configuracion.pushButton_2.clicked.connect(self.color_picker)
+
+        # Al cambiar el valor del comboBox, actualiza el valor de la variable en la clase principal
+        self.configuracion.comboBox_fontsize.currentTextChanged.connect(self.change_current_font_size)
+
+        # Al cambiar el valor del comboBox, actualiza el valor de la variable en la clase principal
+        self.configuracion.comboBox_font.currentTextChanged.connect(self.change_current_font_name)
+
+        # Cambia la fuente actual a la fuente seleccionada, ya que las funciones de antes solo se llaman cuando el usuario actualiza el combobox
+        self.change_current_font_name(self.configuracion.comboBox_font.currentText())
+
+        # Rellenamos el combobox de las fuentes
+        self.rellenar_fuentes()
+
+    def color_picker(self):
+        """
+        Función para escoger el color del texto y convertirlo en formato BGR
+        """
+        self.color = QtWidgets.QColorDialog.getColor()
+        if self.color.isValid():
+            self.configuracion.label_10.setStyleSheet("background-color: {}".format(self.color.name()))
+            h = self.color.name().lstrip('#')
+            self.convertido = tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+            print('Color: ', self.convertido)
+            self.convertido = (self.convertido[2], self.convertido[1], self.convertido[0])
+            self.main_window.convertido = self.convertido
+
+    def rellenar_fuentes(self):
+        """
+        Función para rellenar el combobox del tamaño de las fuentes
+        """
+        for x in range(100):
+            self.configuracion.comboBox_fontsize.addItem(str(x))
+        self.configuracion.comboBox_fontsize.setEditable(True)
+        self.configuracion.comboBox_fontsize.setMaxVisibleItems(10)
+
+    def change_current_font_name(self, font_name):
+        """
+        Función para cambiar el nombre de la fuente en el programa principal para luego poder usarla en las funciones
+        :param font_name: Nombre de la fuente
+        """
+        self.main_window.current_font_name = font_name
+
+    def change_current_font_size(self, text):
+        """
+        Función para cambiar el tamaño de la fuente en el programa principal para luego poder usarla en las funciones
+        :param text: Tamaño de la fuente
+        """
+        self.main_window.current_font_size = text
 
 
 class Excel(QMainWindow):
@@ -86,18 +146,23 @@ class Excel(QMainWindow):
     def __init__(self):
         super(Excel, self).__init__()
 
-        PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))  # Quitar si no tienes carpeta de recursos
+        PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))
 
         self.file = None
+        self.current_font_size = None
+        self.current_font_name = None
         self.jpg = None
         self.porcentaje = None
         self.tmp = None
         self.pixmap = None
         self.ventana = None
-        self.configuracion = None
+        self.configuracion = Configuracion(self)
         self.items = []
+
+        # Diccionario para guardar los datos de los clicks del usuario
+        self.parametros: dict[str, Parametros] = {}
+
         self.posiciones = []
-        self.contador = 0
         self.cabeceras = None
         self.convertido = None
         self.color = None
@@ -160,17 +225,8 @@ class Excel(QMainWindow):
         # Conectamos con la función para obtener los campos en una lista
         self.ui_excel.obtener_info.clicked.connect(self.obtener_info)
 
-        # Colocamos el icono en el botón
-        self.ui_excel.pushButton.setIcon(QIcon('601137-200.png'))
-
-        # Conectamos con la función de escoger el color
-        self.ui_excel.pushButton.clicked.connect(self.color_picker)
-
         # Creamos un combobox donde se introducirán los campos a elegir
         self.comboboxHeaders = CheckableComboBox()
-
-        # Rellenamos el combobox de las fuentes
-        self.rellenar_fuentes()
 
         # Conectamos con la función para seleccionar todos los campos de la tabla
         self.ui_excel.pushButton_3.clicked.connect(self.select_all_checkboxes)
@@ -183,15 +239,6 @@ class Excel(QMainWindow):
         fg = self.frameGeometry()
         fg.moveCenter(centerpoint)
         self.move(fg.topLeft())
-
-    def rellenar_fuentes(self):
-        """
-        Función para rellenar el combobox del tamaño de las fuentes
-        """
-        for x in range(100):
-            self.ui_excel.comboBox_fontsize.addItem(str(x))
-        self.ui_excel.comboBox_fontsize.setEditable(True)
-        self.ui_excel.comboBox_fontsize.setMaxVisibleItems(10)
 
     def change_back(self):
         """
@@ -224,6 +271,10 @@ class Excel(QMainWindow):
         self.setPhoto(self.jpg)
 
     def setPhoto(self, image):
+        """
+        Función para mostrar la imagen en la ventana
+        :param image: Imagen a mostrar
+        """
         self.tmp = image
         image = imutils.resize(image, width=381)
         frame = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -234,13 +285,20 @@ class Excel(QMainWindow):
         """
         Función para abrir la imagen
         """
-        self.contador = 0
         self.posiciones = []
+        names = []
+        for pos in self.ui_excel.comboBox.get_checked_items():
+            names.append(self.items[pos])
+        self.configuracion.configuracion.comboBox.clear()
+        self.configuracion.configuracion.comboBox.addItems(names)
         self.imagen = cv2.imread(self.ui_excel.lineEdit.text(), cv2.IMREAD_UNCHANGED)
         cv2.imshow('image', self.escaled())
         self.configuration()
 
     def check_image(self):
+        """
+        Función que comprará si hay texto en el line edit para ponerlo en no editable
+        """
         if self.ui_excel.lineEdit.text() == "":
             self.ui_excel.carga_imagen_2.setDisabled(True)
         else:
@@ -256,20 +314,45 @@ class Excel(QMainWindow):
         :param param:
         """
         checked_items = self.ui_excel.comboBox.get_checked_items()
-        if event == cv2.EVENT_LBUTTONDOWN and self.contador < len(checked_items):
+        if event == cv2.EVENT_LBUTTONDOWN:
             ejeX = x
             ejeY = y
 
             print('Coordenadas: ', ejeX, ',', ejeY)
-            strxy = str(ejeX) + ',' + str(ejeY)
-            fuente = self.ui_excel.comboBox_font.currentText()
-            texto = self.items[checked_items[self.contador]]
-            cv2.putText(self.imagen, texto, (int((x * 100) / self.porcentaje), int((y * 100) / self.porcentaje)),
-                        self.fuentes[fuente],
-                        int(self.ui_excel.comboBox_fontsize.currentText()), self.convertido,
-                        2)
+
+            # Colocamos las coordenadas en los line edits
+            self.configuracion.configuracion.label_3.setText(str(ejeX))
+            self.configuracion.configuracion.label_6.setText(str(ejeY))
+
+            # Variable donde guardaremos el texto que está dentro del combobox dentro de la ui de configuracion
+            texto = self.configuracion.configuracion.comboBox.currentText()
+
+            # Guardamos en el diccionario en la key "texto" un objeto Parametros que contiene toda la info del clic
+            self.parametros[texto] = Parametros(texto, (int(ejeX), int(ejeY)), self.fuentes[self.current_font_name], int(self.current_font_size), self.convertido)
+
+            # Cargamos de nuevo la imagen para que esté limpia
+            self.imagen = cv2.imread(self.ui_excel.lineEdit.text(), cv2.IMREAD_UNCHANGED)
+
+            # Añadimos los campos que el usuario ya ha establecido
+            self.add_texts()
+
+            # Finalmente mostramos la imagen con todas las modificaciones
             cv2.imshow('image', self.escaled())
-            self.contador += 1
+
+    def add_texts(self):
+        """
+        Función para añadir los textos que el usuario ya ha establecido
+        """
+        print(self.parametros)
+        # Obtenemos las Key del diccionario
+        for key in self.parametros.keys():
+            # Obtenemos el objeto Parametros de la key que hemos obtenido anteriormente y lo guardamos en una variable
+            parametro = self.parametros[key]
+            # Colocamos el texto en la imagen
+            cv2.putText(self.imagen, parametro.nombre, (int((parametro.coordenadas[0] * 100) / self.porcentaje), int((parametro.coordenadas[1] * 100) / self.porcentaje)),
+                        parametro.tipo_fuente,
+                        parametro.tam_fuente, parametro.color,
+                        2)
 
     def escaled(self):
         """
@@ -279,7 +362,7 @@ class Excel(QMainWindow):
 
         # Dimensiones originales
         height = int(self.imagen.shape[0])
-        widht = int(self.imagen.shape[1])
+        width = int(self.imagen.shape[1])
 
         # Dimensiones de mi pantalla
         screen_width = root.winfo_screenwidth()
@@ -293,10 +376,10 @@ class Excel(QMainWindow):
         self.porcentaje = 0
 
         # Comprobamos que lado es más grande para hacer la regla de tres
-        if height > widht:
+        if height > width:
             self.porcentaje = (escaldo_height * 100) / height
-        elif widht > height:
-            self.porcentaje = (escalado_width * 100) / widht
+        elif width > height:
+            self.porcentaje = (escalado_width * 100) / width
 
         # Calculamos la altura y el ancho de la imagen aplicándole el porcentaje
         altura = int(self.imagen.shape[0] * self.porcentaje / 100)
@@ -310,7 +393,6 @@ class Excel(QMainWindow):
         En esta función se mostrará la imagen con el tamaño ya escalado
         """
         cv2.imshow("image", self.escaled())
-        self.configuracion = Configuracion()
         self.configuracion.show()
         cv2.setMouseCallback("image", self.click_event)
 
@@ -324,19 +406,10 @@ class Excel(QMainWindow):
                 break
         cv2.waitKey(0)
 
-    def color_picker(self):
-        """
-        Función para escoger el color del texto y convertirlo en formato BGR
-        """
-        self.color = QtWidgets.QColorDialog.getColor()
-        if self.color.isValid():
-            self.ui_excel.label_7.setStyleSheet("background-color: {}".format(self.color.name()))
-            h = self.color.name().lstrip('#')
-            self.convertido = tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
-            print('Color: ', self.convertido)
-            self.convertido = (self.convertido[2], self.convertido[1], self.convertido[0])
-
     def obtener_info(self):
+        """
+        En esta función se obtendrá
+        """
         for row in range(self.ui_excel.tableWidget.rowCount()):
             if self.ui_excel.tableWidget.item(row, 0).checkState() == Qt.CheckState.Checked:
                 print([self.ui_excel.tableWidget.item(row, col).text() for col in
@@ -346,17 +419,20 @@ class Excel(QMainWindow):
         """
         Función para seleccionar o deseleccionar todos los campos de la tabla
         """
-        for row in range(self.ui_excel.tableWidget.rowCount()):
-            if self.ui_excel.tableWidget.item(row, 0).checkState() == Qt.CheckState.Unchecked:
-                self.ui_excel.tableWidget.item(row, 0).setCheckState(Qt.CheckState.Checked)
+        if self.ui_excel.tableWidget.rowCount() > 0:
+            if self.ui_excel.tableWidget.item(0, 0).checkState() == Qt.CheckState.Checked:
+                for row in range(self.ui_excel.tableWidget.rowCount()):
+                    self.ui_excel.tableWidget.item(row, 0).setCheckState(Qt.CheckState.Unchecked)
             else:
-                self.ui_excel.tableWidget.item(row, 0).setCheckState(Qt.CheckState.Unchecked)
+                for row in range(self.ui_excel.tableWidget.rowCount()):
+                    self.ui_excel.tableWidget.item(row, 0).setCheckState(Qt.CheckState.Checked)
 
     def open_excel(self):
         """
         Función que se encargará de buscar archivos excel y rellenar nuestra tabla
         """
-        self.file = QFileDialog.getOpenFileName(self, "Abrir Archivo Excel", "", "Excel Files (*.xlsx) ;; All Files (*)")
+        self.file = QFileDialog.getOpenFileName(self, "Abrir Archivo Excel", "",
+                                                "Excel Files (*.xlsx) ;; All Files (*)")
         self.direccion = self.file[0]
 
         try:

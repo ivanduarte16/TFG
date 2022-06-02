@@ -37,15 +37,27 @@ class CheckableComboBox(QComboBox):
         self._changed = True
     
     def hidePopup(self):
+        """
+        Función para ocultar el popup cuando se pulsa fuera del mismo
+        """
         if not self._changed:
             super().hidePopup()
         self._changed = False
 
     def itemChecked(self, index):
+        """
+        Función para comprobar si el campo del combobox está con el tick de check
+        :param index:
+        :return:
+        """
         item = self.model().item(index, self.modelColumn())
         return item.checkState() == Qt.Checked
 
     def get_checked_items(self) -> list[int]:
+        """
+        Función para obtener los índices de los elementos marcados
+        :return:
+        """
         checkedItems = []
         for i in range(self.count()):
             if self.itemChecked(i):
