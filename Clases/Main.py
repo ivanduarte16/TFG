@@ -33,7 +33,7 @@ class Main(QMainWindow):
 
     def cambio_ventanas(self):
         """
-        Función que cambiará a una ventana o a otra en función del radiobutton seleccionado
+        Función que cambiará a una ventana o a otra en función del radiobutton seleccionados
         """
         self.windowExcel = Excel()
         self.windowExcel.show()

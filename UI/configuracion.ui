@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>356</height>
+    <height>403</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -140,7 +140,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
+      <y>370</y>
       <width>151</width>
       <height>25</height>
      </rect>
@@ -153,7 +153,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>260</y>
+      <y>310</y>
       <width>391</width>
       <height>51</height>
      </rect>
@@ -329,7 +329,7 @@ background-color: rgb(246, 245, 244);</string>
         <string/>
        </property>
        <property name="icon">
-        <iconset theme="color_picker" resource="color_picker.qrc">
+        <iconset theme="color_picker">
          <normaloff>:/prefijoNuevo/601137-200.png</normaloff>:/prefijoNuevo/601137-200.png</iconset>
        </property>
        <property name="iconSize">
@@ -339,6 +339,35 @@ background-color: rgb(246, 245, 244);</string>
         </size>
        </property>
       </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>271</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_11">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Grosor de la letra:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_fontsize_2"/>
      </item>
     </layout>
    </widget>

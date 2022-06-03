@@ -5,7 +5,7 @@ import cv2
 import imutils
 import pandas as pd
 from PySide6 import QtWidgets, QtGui
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QScreen, QAction, QKeySequence, QImage
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog, QTableWidgetItem
 
@@ -23,6 +23,13 @@ class Excel(QMainWindow):
 
         PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))
 
+        # Establecemos un tamaño fijo a la ventana
+        self.setFixedSize(QSize(1134, 822))
+
+        # Diccionario para guardar los datos de los clicks del usuario
+        self.parametros: dict[str, Parametros] = {}
+
+        self.seleccionados = None
         self.file = None
         self.current_font_size = None
         self.current_font_name = None
@@ -31,12 +38,7 @@ class Excel(QMainWindow):
         self.tmp = None
         self.pixmap = None
         self.ventana = None
-        self.configuracion = Configuracion(self)
         self.items = []
-
-        # Diccionario para guardar los datos de los clicks del usuario
-        self.parametros: dict[str, Parametros] = {}
-
         self.posiciones = []
         self.cabeceras = None
         self.convertido = None
@@ -46,6 +48,7 @@ class Excel(QMainWindow):
         self.welcome = None
         self.direccion = None
 
+        self.configuracion = Configuracion(self)
         self.ui_excel = Ui_Dialog()
         self.ui_excel.setupUi(self)
 
@@ -97,14 +100,14 @@ class Excel(QMainWindow):
         # Abre la imagen en una ventana
         self.ui_excel.carga_imagen_2.clicked.connect(self.open_image)
 
-        # Conectamos con la función para obtener los campos en una lista
-        self.ui_excel.obtener_info.clicked.connect(self.obtener_info)
-
         # Creamos un combobox donde se introducirán los campos a elegir
         self.comboboxHeaders = CheckableComboBox()
 
         # Conectamos con la función para seleccionar todos los campos de la tabla
         self.ui_excel.pushButton_3.clicked.connect(self.select_all_checkboxes)
+
+        # Conectamos con la función de generar los documentos
+        self.ui_excel.genera_excel.clicked.connect(self.generator)
 
     def center(self):
         """
@@ -200,9 +203,12 @@ class Excel(QMainWindow):
             # Variable donde guardaremos el texto que está dentro del combobox dentro de la ui de configuracion
             texto = self.configuracion.configuracion.comboBox.currentText()
 
+            # Variable donde guardaremos el grosor de la fuente que está dentro del combobox dentro de la ui de configuracion
+            grosor = self.configuracion.configuracion.comboBox_fontsize_2.currentText()
+
             # Guardamos en el diccionario en la key "texto" un objeto Parametros que contiene toda la info del clic
             self.parametros[texto] = Parametros(texto, (int(ejeX), int(ejeY)), self.fuentes[self.current_font_name],
-                                                int(self.current_font_size), self.convertido)
+                                                int(self.current_font_size), self.convertido, int(grosor))
 
             # Cargamos de nuevo la imagen para que esté limpia
             self.imagen = cv2.imread(self.ui_excel.lineEdit.text(), cv2.IMREAD_UNCHANGED)
@@ -218,16 +224,18 @@ class Excel(QMainWindow):
         Función para añadir los textos que el usuario ya ha establecido
         """
         print(self.parametros)
+
         # Obtenemos las Key del diccionario
         for key in self.parametros.keys():
             # Obtenemos el objeto Parametros de la key que hemos obtenido anteriormente y lo guardamos en una variable
             parametro = self.parametros[key]
+
             # Colocamos el texto en la imagen
             cv2.putText(self.imagen, parametro.nombre, (int((parametro.coordenadas[0] * 100) / self.porcentaje),
                                                         int((parametro.coordenadas[1] * 100) / self.porcentaje)),
                         parametro.tipo_fuente,
                         parametro.tam_fuente, parametro.color,
-                        2)
+                        parametro.grosor)
 
     def escaled(self):
         """
@@ -281,15 +289,6 @@ class Excel(QMainWindow):
                 break
         cv2.waitKey(0)
 
-    def obtener_info(self):
-        """
-        En esta función se obtendrá
-        """
-        for row in range(self.ui_excel.tableWidget.rowCount()):
-            if self.ui_excel.tableWidget.item(row, 0).checkState() == Qt.CheckState.Checked:
-                print([self.ui_excel.tableWidget.item(row, col).text() for col in
-                       range(self.ui_excel.tableWidget.columnCount())])
-
     def select_all_checkboxes(self):
         """
         Función para seleccionar o deseleccionar todos los campos de la tabla
@@ -317,14 +316,14 @@ class Excel(QMainWindow):
             x = len(columnas)
             y = len(df_fila)
 
-        # Comprobamos que el archivo seleccionado es el correcto
+        # Comprobamos que el archivo seleccionados es el correcto
         except ValueError:
             QMessageBox.about(self, 'Información', 'Formato incorrecto')
             return None
 
-        # Comprobamos que se ha seleccionado un archivo
+        # Comprobamos que se ha seleccionados un archivo
         except FileNotFoundError:
-            QMessageBox.about(self, 'Información', 'No se ha seleccionado ningún archivo')
+            QMessageBox.about(self, 'Información', 'No se ha seleccionados ningún archivo')
             return None
 
         # print(x, y)
@@ -356,3 +355,13 @@ class Excel(QMainWindow):
                     objecto.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
                     objecto.setCheckState(Qt.CheckState.Unchecked)
                     self.ui_excel.tableWidget.setItem(row, col, objecto)
+
+    def generator(self):
+        print("Estos son los datos que vamos a tratar: ", '\n')
+        self.seleccionados = []
+        for row in range(self.ui_excel.tableWidget.rowCount()):
+            if self.ui_excel.tableWidget.item(row, 0).checkState() == Qt.CheckState.Checked:
+                self.seleccionados.append([self.ui_excel.tableWidget.item(row, col).text() for col in
+                                           range(self.ui_excel.tableWidget.columnCount())])
+        for i in self.seleccionados:
+            print(i)

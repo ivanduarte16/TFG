@@ -56,6 +56,11 @@ class Configuracion(QMainWindow):
         self.configuracion.comboBox_fontsize.setEditable(True)
         self.configuracion.comboBox_fontsize.setMaxVisibleItems(10)
 
+        for y in range(20):
+            self.configuracion.comboBox_fontsize_2.addItem(str(y))
+        self.configuracion.comboBox_fontsize_2.setEditable(True)
+        self.configuracion.comboBox_fontsize_2.setMaxVisibleItems(10)
+
     def change_current_font_name(self, font_name):
         """
         Función para cambiar el nombre de la fuente en el programa principal para luego poder usarla en las funciones

@@ -19,7 +19,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(416, 356)
+        MainWindow.resize(416, 403)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.comboBox = QComboBox(self.centralwidget)
@@ -60,10 +60,10 @@ class Ui_MainWindow(object):
         self.label_6.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setGeometry(QRect(10, 320, 151, 25))
+        self.pushButton.setGeometry(QRect(10, 370, 151, 25))
         self.label_13 = QLabel(self.centralwidget)
         self.label_13.setObjectName(u"label_13")
-        self.label_13.setGeometry(QRect(10, 260, 391, 51))
+        self.label_13.setGeometry(QRect(10, 310, 391, 51))
         self.label_13.setStyleSheet(u"background-color: rgb(192, 191, 188);\n"
                                     "background-color: rgb(246, 245, 244);")
         self.label_13.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
@@ -153,6 +153,23 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.pushButton_2)
 
+        self.widget = QWidget(self.centralwidget)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(10, 260, 271, 27))
+        self.horizontalLayout_4 = QHBoxLayout(self.widget)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.label_11 = QLabel(self.widget)
+        self.label_11.setObjectName(u"label_11")
+        self.label_11.setFont(font4)
+
+        self.horizontalLayout_4.addWidget(self.label_11)
+
+        self.comboBox_fontsize_2 = QComboBox(self.widget)
+        self.comboBox_fontsize_2.setObjectName(u"comboBox_fontsize_2")
+
+        self.horizontalLayout_4.addWidget(self.comboBox_fontsize_2)
+
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -187,4 +204,5 @@ class Ui_MainWindow(object):
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Color de la fuente:", None))
         self.label_10.setText("")
         self.pushButton_2.setText("")
+        self.label_11.setText(QCoreApplication.translate("MainWindow", u"Grosor de la letra:", None))
     # retranslateUi

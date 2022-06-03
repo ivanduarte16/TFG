@@ -1,5 +1,5 @@
 class Parametros:
-    def __init__(self, nombre, coordenadas, tipo_fuente, tam_fuente, color):
+    def __init__(self, nombre, coordenadas, tipo_fuente, tam_fuente, color, grosor):
         """
         Clase que contiene los parametros como nombre, coordenadas, tipo de fuente, tamaño de fuente y color.
         :param nombre: Nombre del parametro.
@@ -13,3 +13,4 @@ class Parametros:
         self.tipo_fuente: str = tipo_fuente
         self.tam_fuente: int = tam_fuente
         self.color: tuple[int, int, int] = color   # (b, g, r)
+        self.grosor: int = grosor
