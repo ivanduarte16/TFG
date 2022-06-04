@@ -21,12 +21,13 @@ class Excel(QMainWindow):
     def __init__(self):
         super(Excel, self).__init__()
 
-        PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))
+        self.PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))
+        self.SAVE_FOLDER = os.path.join(self.PROJECT_FOLDER, 'generado')
 
         # Establecemos un tamaño fijo a la ventana
         self.setFixedSize(QSize(1134, 822))
 
-        # Diccionario para guardar los datos de los clicks del usuario
+        # Diccionario para guardar los datos de los clics del usuario
         self.parametros: dict[str, Parametros] = {}
 
         self.seleccionados = None
@@ -39,7 +40,6 @@ class Excel(QMainWindow):
         self.pixmap = None
         self.ventana = None
         self.items = []
-        self.posiciones = []
         self.cabeceras = None
         self.convertido = None
         self.color = None
@@ -109,6 +109,11 @@ class Excel(QMainWindow):
         # Conectamos con la función de generar los documentos
         self.ui_excel.genera_excel.clicked.connect(self.generator)
 
+        # Conectamos con la función para seleccionar/des seleccionar todos los campos del combobox
+        self.ui_excel.select_all.clicked.connect(self.ui_excel.comboBox.change_checked_items)
+
+        self.ui_excel.horizontalLayout_5.setEnabled(False)
+
     def center(self):
         """
         Función para centrar la ventana
@@ -161,7 +166,6 @@ class Excel(QMainWindow):
         """
         Función para abrir la imagen
         """
-        self.posiciones = []
         names = []
         for pos in self.ui_excel.comboBox.get_checked_items():
             names.append(self.items[pos])
@@ -195,8 +199,8 @@ class Excel(QMainWindow):
             ejeY = (y * 100) / self.porcentaje
 
             # Colocamos las coordenadas en los line edits
-            self.configuracion.configuracion.label_3.setText(str(ejeX))
-            self.configuracion.configuracion.label_6.setText(str(ejeY))
+            self.configuracion.configuracion.label_3.setText(str(int(ejeX)))
+            self.configuracion.configuracion.label_6.setText(str(int(ejeY)))
 
             # Variable donde guardaremos el texto que está dentro del combobox dentro de la ui de configuracion
             texto = self.configuracion.configuracion.comboBox.currentText()
@@ -205,7 +209,7 @@ class Excel(QMainWindow):
             grosor = self.configuracion.configuracion.comboBox_fontsize_2.currentText()
 
             # Guardamos en el diccionario en la key "texto" un objeto Parametros que contiene toda la info del clic
-            self.parametros[texto] = Parametros(texto, (int(ejeX), int(ejeY)), self.fuentes[self.current_font_name],
+            self.parametros[texto] = Parametros(texto, (int(ejeX), int(ejeY)), self.current_font_name,
                                                 int(self.current_font_size), self.convertido, int(grosor))
 
             # Cargamos de nuevo la imagen para que esté limpia
@@ -217,7 +221,7 @@ class Excel(QMainWindow):
             # Finalmente mostramos la imagen con todas las modificaciones
             cv2.imshow('image', self.escaled())
 
-    def add_texts(self):
+    def add_texts(self, valor=None):
         """
         Función para añadir los textos que el usuario ya ha establecido
         """
@@ -227,9 +231,8 @@ class Excel(QMainWindow):
             parametro = self.parametros[key]
 
             # Colocamos el texto en la imagen
-            cv2.putText(self.imagen, parametro.nombre, (int((parametro.coordenadas[0] * 100) / self.porcentaje),
-                                                        int((parametro.coordenadas[1] * 100) / self.porcentaje)),
-                        parametro.tipo_fuente,
+            cv2.putText(self.imagen, parametro.nombre if valor is None else valor[self.items.index(key)], parametro.coordenadas,
+                        self.fuentes[parametro.tipo_fuente],
                         parametro.tam_fuente, parametro.color,
                         parametro.grosor)
 
@@ -325,6 +328,7 @@ class Excel(QMainWindow):
         self.ui_excel.tableWidget.setRowCount(y)
         self.ui_excel.tableWidget.setColumnCount(x)
         self.columnas = self.ui_excel.tableWidget.columnCount()
+        self.ui_excel.comboBox.clear()
 
         # Rellenamos las celdas con los datos del excel
         for col in range(x):
@@ -350,6 +354,7 @@ class Excel(QMainWindow):
                     objecto.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
                     objecto.setCheckState(Qt.CheckState.Unchecked)
                     self.ui_excel.tableWidget.setItem(row, col, objecto)
+        self.ui_excel.horizontalLayout_5.setEnabled(True)
 
     def generator(self):
         """
@@ -362,4 +367,9 @@ class Excel(QMainWindow):
                 self.seleccionados.append([self.ui_excel.tableWidget.item(row, col).text() for col in
                                            range(self.ui_excel.tableWidget.columnCount())])
         for i in self.seleccionados:
-            print(i)
+            self.imagen = cv2.imread(self.ui_excel.lineEdit.text(), cv2.IMREAD_UNCHANGED)
+            self.add_texts(valor=i)
+            print("Generando documento para: "+i[1])
+            save_name = i[1]+"_"+i[0].replace(" ", "_")+".jpg"
+            save_name = os.path.join(self.SAVE_FOLDER, save_name)
+            cv2.imwrite(save_name, self.imagen)

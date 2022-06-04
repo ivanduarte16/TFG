@@ -63,3 +63,16 @@ class CheckableComboBox(QComboBox):
             if self.itemChecked(i):
                 checkedItems.append(i)
         return checkedItems
+
+    def change_checked_items(self):
+        """
+        Función para seleccionar o deseleccionar todos los elementos
+        """
+        if self.count() > 0:
+            if self.itemChecked(0):
+                for i in range(self.count()):
+                    self.setItemChecked(i, False)
+            else:
+                for i in range(self.count()):
+                    self.setItemChecked(i, True)
+
