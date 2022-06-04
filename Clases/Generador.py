@@ -191,10 +191,8 @@ class Excel(QMainWindow):
         """
         checked_items = self.ui_excel.comboBox.get_checked_items()
         if event == cv2.EVENT_LBUTTONDOWN:
-            ejeX = x
-            ejeY = y
-
-            print('Coordenadas: ', ejeX, ',', ejeY)
+            ejeX = (x * 100) / self.porcentaje
+            ejeY = (y * 100) / self.porcentaje
 
             # Colocamos las coordenadas en los line edits
             self.configuracion.configuracion.label_3.setText(str(ejeX))
@@ -223,8 +221,6 @@ class Excel(QMainWindow):
         """
         Función para añadir los textos que el usuario ya ha establecido
         """
-        print(self.parametros)
-
         # Obtenemos las Key del diccionario
         for key in self.parametros.keys():
             # Obtenemos el objeto Parametros de la key que hemos obtenido anteriormente y lo guardamos en una variable
@@ -243,7 +239,7 @@ class Excel(QMainWindow):
         :return: Devolverá los parámetros de la imagen escalada
         """
 
-        # Dimensiones originales
+        # Dimensiones originales de la imagen
         height = int(self.imagen.shape[0])
         width = int(self.imagen.shape[1])
 
@@ -326,7 +322,6 @@ class Excel(QMainWindow):
             QMessageBox.about(self, 'Información', 'No se ha seleccionados ningún archivo')
             return None
 
-        # print(x, y)
         self.ui_excel.tableWidget.setRowCount(y)
         self.ui_excel.tableWidget.setColumnCount(x)
         self.columnas = self.ui_excel.tableWidget.columnCount()
@@ -357,6 +352,9 @@ class Excel(QMainWindow):
                     self.ui_excel.tableWidget.setItem(row, col, objecto)
 
     def generator(self):
+        """
+        Función que generará los documentos y los guardará
+        """
         print("Estos son los datos que vamos a tratar: ", '\n')
         self.seleccionados = []
         for row in range(self.ui_excel.tableWidget.rowCount()):
