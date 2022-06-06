@@ -34,7 +34,7 @@ class Configuracion(QMainWindow):
         self.configuracion.comboBox.currentTextChanged.connect(self.detect_changes_combobox)
 
         # Al cambiar el valor del comboBox, actualiza el valor de la variable en la clase principal
-        self.configuracion.comboBox_fontsize.currentTextChanged.connect(self.change_current_font_size)
+        self.configuracion.spinBox.valueChanged.connect(self.change_current_font_size)
 
         # Al cambiar el valor del comboBox, actualiza el valor de la variable en la clase principal
         self.configuracion.comboBox_font.currentTextChanged.connect(self.change_current_font_name)
@@ -80,6 +80,9 @@ class Configuracion(QMainWindow):
         :param font_name: Nombre de la fuente
         """
         self.main_window.current_font_name = font_name
+        for ruta in os.listdir(self.main_window.FONT_PATH):
+            if font_name in ruta.split(".")[0]:
+                self.configuracion.label_13.setFont(QFont(os.path.join(self.main_window.FONT_PATH, ruta), 12))
 
     def change_current_font_size(self, text):
         """
@@ -95,7 +98,7 @@ class Configuracion(QMainWindow):
         """
         if text in self.main_window.parametros.keys():
             params: Parametros = self.main_window.parametros[text]
-            self.configuracion.comboBox_fontsize.setCurrentText(str(params.tam_fuente))
+            self.configuracion.spinBox.setValue(params.tam_fuente)
             self.configuracion.comboBox_fontsize_2.setCurrentText(str(params.grosor))
             self.configuracion.comboBox_font.setCurrentText(str(params.tipo_fuente))
             rgb = (params.color[2], params.color[1], params.color[0])

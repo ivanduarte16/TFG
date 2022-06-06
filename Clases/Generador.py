@@ -222,6 +222,8 @@ class Excel(QMainWindow):
             # Obtenemos el objeto Parametros de la key que hemos obtenido anteriormente y lo guardamos en una variable
             parametro = self.parametros[key]
 
+            fuente = os.path.join(self.FONT_PATH, 'Mangaka.otf')
+
             for ruta in os.listdir(self.FONT_PATH):
                 if parametro.tipo_fuente in ruta:
                     fuente = os.path.join(self.FONT_PATH, ruta)
