@@ -12,7 +12,8 @@ from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
                             QSize, Qt)
 from PySide6.QtGui import (QFont, QIcon)
 from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel,
-                               QPushButton, QWidget)
+                               QPushButton, QSpinBox,
+                               QWidget)
 
 
 class Ui_MainWindow(object):
@@ -63,7 +64,7 @@ class Ui_MainWindow(object):
         self.pushButton.setGeometry(QRect(10, 370, 151, 25))
         self.label_13 = QLabel(self.centralwidget)
         self.label_13.setObjectName(u"label_13")
-        self.label_13.setGeometry(QRect(10, 310, 391, 51))
+        self.label_13.setGeometry(QRect(10, 300, 391, 61))
         self.label_13.setStyleSheet(u"background-color: rgb(192, 191, 188);\n"
                                     "background-color: rgb(246, 245, 244);")
         self.label_13.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
@@ -97,7 +98,7 @@ class Ui_MainWindow(object):
 
         self.layoutWidget1 = QWidget(self.centralwidget)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(10, 180, 391, 27))
+        self.layoutWidget1.setGeometry(QRect(10, 180, 391, 28))
         self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -110,10 +111,12 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.label_8)
 
-        self.comboBox_fontsize = QComboBox(self.layoutWidget1)
-        self.comboBox_fontsize.setObjectName(u"comboBox_fontsize")
+        self.spinBox = QSpinBox(self.layoutWidget1)
+        self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setMaximum(500)
+        self.spinBox.setSingleStep(1)
 
-        self.horizontalLayout_2.addWidget(self.comboBox_fontsize)
+        self.horizontalLayout_2.addWidget(self.spinBox)
 
         self.layoutWidget2 = QWidget(self.centralwidget)
         self.layoutWidget2.setObjectName(u"layoutWidget2")
@@ -153,19 +156,19 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.pushButton_2)
 
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(10, 260, 271, 27))
-        self.horizontalLayout_4 = QHBoxLayout(self.widget)
+        self.layoutWidget3 = QWidget(self.centralwidget)
+        self.layoutWidget3.setObjectName(u"layoutWidget3")
+        self.layoutWidget3.setGeometry(QRect(10, 260, 271, 27))
+        self.horizontalLayout_4 = QHBoxLayout(self.layoutWidget3)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.label_11 = QLabel(self.widget)
+        self.label_11 = QLabel(self.layoutWidget3)
         self.label_11.setObjectName(u"label_11")
         self.label_11.setFont(font4)
 
         self.horizontalLayout_4.addWidget(self.label_11)
 
-        self.comboBox_fontsize_2 = QComboBox(self.widget)
+        self.comboBox_fontsize_2 = QComboBox(self.layoutWidget3)
         self.comboBox_fontsize_2.setObjectName(u"comboBox_fontsize_2")
 
         self.horizontalLayout_4.addWidget(self.comboBox_fontsize_2)

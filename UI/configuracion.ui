@@ -153,9 +153,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>310</y>
+      <y>300</y>
       <width>391</width>
-      <height>51</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -249,7 +249,7 @@ background-color: rgb(246, 245, 244);</string>
       <x>10</x>
       <y>180</y>
       <width>391</width>
-      <height>27</height>
+      <height>28</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -268,7 +268,14 @@ background-color: rgb(246, 245, 244);</string>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_fontsize"/>
+      <widget class="QSpinBox" name="spinBox">
+       <property name="maximum">
+        <number>500</number>
+       </property>
+       <property name="singleStep">
+        <number>1</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

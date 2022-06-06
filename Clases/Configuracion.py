@@ -1,4 +1,8 @@
+import os
+
 from PySide6 import QtWidgets
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QMainWindow
 
 from Clases.Parametros import Parametros
@@ -13,6 +17,9 @@ class Configuracion(QMainWindow):
 
         # Importamos la clase principal del programa para poder acceder a sus variables y modificarlas
         self.main_window = mainwindow
+
+        # Establecemos un tamaño fijo a la ventana
+        self.setFixedSize(QSize(416, 403))
 
         self.configuracion = Ui_MainWindow()
         self.configuracion.setupUi(self)
@@ -54,15 +61,18 @@ class Configuracion(QMainWindow):
         """
         Función para rellenar el combobox del tamaño de las fuentes
         """
-        for x in range(100):
-            self.configuracion.comboBox_fontsize.addItem(str(x))
-        self.configuracion.comboBox_fontsize.setEditable(True)
-        self.configuracion.comboBox_fontsize.setMaxVisibleItems(10)
 
+        # Grosor fuentes
         for y in range(20):
             self.configuracion.comboBox_fontsize_2.addItem(str(y))
         self.configuracion.comboBox_fontsize_2.setEditable(True)
         self.configuracion.comboBox_fontsize_2.setMaxVisibleItems(10)
+
+        # Nombres de la fuente
+        self.configuracion.comboBox_font.clear()
+        for ruta in os.listdir(self.main_window.FONT_PATH):
+            font_name = ruta.split("/")[-1].split(".")[0]
+            self.configuracion.comboBox_font.addItem(font_name)
 
     def change_current_font_name(self, font_name):
         """

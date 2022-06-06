@@ -3,7 +3,9 @@ import tkinter as tk
 
 import cv2
 import imutils
+import numpy as np
 import pandas as pd
+from PIL import ImageFont, ImageDraw, Image
 from PySide6 import QtWidgets, QtGui
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QScreen, QAction, QKeySequence, QImage
@@ -23,6 +25,7 @@ class Excel(QMainWindow):
 
         self.PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))
         self.SAVE_FOLDER = os.path.join(self.PROJECT_FOLDER, 'generado')
+        self.FONT_PATH = os.path.join(self.PROJECT_FOLDER, 'fonts')
 
         # Establecemos un tamaño fijo a la ventana
         self.setFixedSize(QSize(1134, 822))
@@ -51,18 +54,6 @@ class Excel(QMainWindow):
         self.configuracion = Configuracion(self)
         self.ui_excel = Ui_Dialog()
         self.ui_excel.setupUi(self)
-
-        # Creamos un diccionario para que acceda con la llave del combobox
-        self.fuentes = {
-            "FONT_HERSHEY_SIMPLEX": cv2.FONT_HERSHEY_SIMPLEX,
-            "FONT_HERSHEY_PLAIN": cv2.FONT_HERSHEY_PLAIN,
-            "FONT_HERSHEY_DUPLEX": cv2.FONT_HERSHEY_DUPLEX,
-            "FONT_HERSHEY_COMPLEX": cv2.FONT_HERSHEY_COMPLEX,
-            "FONT_HERSHEY_TRIPLEX": cv2.FONT_HERSHEY_TRIPLEX,
-            "FONT_HERSHEY_COMPLEX_SMALL": cv2.FONT_HERSHEY_COMPLEX_SMALL,
-            "FONT_HERSHEY_SCRIPT_SIMPLEX": cv2.FONT_HERSHEY_SCRIPT_SIMPLEX,
-            "FONT_HERSHEY_SCRIPT_COMPLEX": cv2.FONT_HERSHEY_SCRIPT_COMPLEX
-        }
 
         # Centramos la ventana
         self.center()
@@ -227,14 +218,23 @@ class Excel(QMainWindow):
         """
         # Obtenemos las Key del diccionario
         for key in self.parametros.keys():
+
             # Obtenemos el objeto Parametros de la key que hemos obtenido anteriormente y lo guardamos en una variable
             parametro = self.parametros[key]
 
-            # Colocamos el texto en la imagen
-            cv2.putText(self.imagen, parametro.nombre if valor is None else valor[self.items.index(key)], parametro.coordenadas,
-                        self.fuentes[parametro.tipo_fuente],
-                        parametro.tam_fuente, parametro.color,
-                        parametro.grosor)
+            for ruta in os.listdir(self.FONT_PATH):
+                if parametro.tipo_fuente in ruta:
+                    fuente = os.path.join(self.FONT_PATH, ruta)
+
+            font = ImageFont.truetype(fuente, parametro.tam_fuente)
+            img_pil = Image.fromarray(self.imagen)
+            draw = ImageDraw.Draw(img_pil)
+            color = list(parametro.color)
+            color.append(0)
+            color = tuple(color)
+            draw.text(parametro.coordenadas, parametro.nombre if valor is None else valor[self.items.index(key)],
+                      font=font, fill=color)
+            self.imagen = np.array(img_pil)
 
     def escaled(self):
         """
@@ -278,8 +278,8 @@ class Excel(QMainWindow):
         self.configuracion.show()
         cv2.setMouseCallback("image", self.click_event)
 
-        wait_time = 1000
         # Si cerramos la ventana se cerrará la ventana de confi
+        wait_time = 1000
         while cv2.getWindowProperty('image', cv2.WND_PROP_VISIBLE) >= 1:
             keyCode = cv2.waitKey(wait_time)
             if (keyCode & 0xFF) == ord("q"):
@@ -369,7 +369,7 @@ class Excel(QMainWindow):
         for i in self.seleccionados:
             self.imagen = cv2.imread(self.ui_excel.lineEdit.text(), cv2.IMREAD_UNCHANGED)
             self.add_texts(valor=i)
-            print("Generando documento para: "+i[1])
-            save_name = i[1]+"_"+i[0].replace(" ", "_")+".jpg"
+            print("Generando documento para: " + i[1])
+            save_name = i[1] + "_" + i[0].replace(" ", "_") + ".jpg"
             save_name = os.path.join(self.SAVE_FOLDER, save_name)
             cv2.imwrite(save_name, self.imagen)
