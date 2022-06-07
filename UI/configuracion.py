@@ -81,18 +81,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.label_7)
 
         self.comboBox_font = QComboBox(self.layoutWidget)
-        self.comboBox_font.addItem("")
-        self.comboBox_font.addItem("")
-        self.comboBox_font.addItem("")
-        self.comboBox_font.addItem("")
-        self.comboBox_font.addItem("")
-        self.comboBox_font.addItem("")
-        self.comboBox_font.addItem("")
-        self.comboBox_font.addItem("")
         self.comboBox_font.setObjectName(u"comboBox_font")
         font3 = QFont()
         font3.setPointSize(10)
         self.comboBox_font.setFont(font3)
+        self.comboBox_font.setEditable(True)
 
         self.horizontalLayout.addWidget(self.comboBox_font)
 
@@ -192,17 +185,6 @@ class Ui_MainWindow(object):
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Guardar coordendas", None))
         self.label_13.setText(QCoreApplication.translate("MainWindow", u"Este es tu texto", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Tipo de fuente:", None))
-        self.comboBox_font.setItemText(0, QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_SIMPLEX", None))
-        self.comboBox_font.setItemText(1, QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_PLAIN", None))
-        self.comboBox_font.setItemText(2, QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_DUPLEX", None))
-        self.comboBox_font.setItemText(3, QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_COMPLEX", None))
-        self.comboBox_font.setItemText(4, QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_TRIPLEX", None))
-        self.comboBox_font.setItemText(5, QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_COMPLEX_SMALL", None))
-        self.comboBox_font.setItemText(6,
-                                       QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_SCRIPT_SIMPLEX", None))
-        self.comboBox_font.setItemText(7,
-                                       QCoreApplication.translate("MainWindow", u"FONT_HERSHEY_SCRIPT_COMPLEX", None))
-
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Tama\u00f1o de la fuente:", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Color de la fuente:", None))
         self.label_10.setText("")

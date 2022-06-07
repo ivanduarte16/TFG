@@ -10,13 +10,13 @@ from UI.configuracion import Ui_MainWindow
 
 
 class Configuracion(QMainWindow):
-    def __init__(self, mainwindow):
+    def __init__(self, generador):
         super(Configuracion, self).__init__()
 
         self.setWindowTitle("Configuracion")
 
-        # Importamos la clase principal del programa para poder acceder a sus variables y modificarlas
-        self.main_window = mainwindow
+        # Importamos la clase generador del programa para poder acceder a sus variables y modificarlas
+        self.main_window = generador
 
         # Establecemos un tamaño fijo a la ventana
         self.setFixedSize(QSize(416, 403))

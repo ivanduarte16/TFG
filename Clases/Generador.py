@@ -11,6 +11,7 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QScreen, QAction, QKeySequence, QImage
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog, QTableWidgetItem
 
+from Clases.BaseDatos import BaseDatos
 from Clases.CheckableComboBox import CheckableComboBox
 from Clases.Configuracion import Configuracion
 from Clases.Parametros import Parametros
@@ -23,6 +24,7 @@ class Excel(QMainWindow):
     def __init__(self):
         super(Excel, self).__init__()
 
+        self.windowDatabase = None
         self.PROJECT_FOLDER = os.path.dirname(os.path.dirname(__file__))
         self.SAVE_FOLDER = os.path.join(self.PROJECT_FOLDER, 'generado')
         self.FONT_PATH = os.path.join(self.PROJECT_FOLDER, 'fonts')
@@ -105,6 +107,8 @@ class Excel(QMainWindow):
 
         self.ui_excel.horizontalLayout_5.setEnabled(False)
 
+        self.ui_excel.pushButton.clicked.connect(self.open_database)
+
     def center(self):
         """
         Función para centrar la ventana
@@ -132,6 +136,10 @@ class Excel(QMainWindow):
 
         if button == QMessageBox.Yes:
             self.close()
+
+    def open_database(self):
+        self.windowDatabase = BaseDatos(self)
+        self.windowDatabase.show()
 
     def image_path(self):
         """

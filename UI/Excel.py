@@ -82,6 +82,9 @@ class Ui_Dialog(object):
         self.pushButton_3 = QPushButton(self.tabla)
         self.pushButton_3.setObjectName(u"pushButton_3")
         self.pushButton_3.setGeometry(QRect(10, 60, 131, 25))
+        self.pushButton = QPushButton(self.tabla)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setGeometry(QRect(990, 30, 121, 31))
         self.qtab.addTab(self.tabla, "")
         self.imagen = QWidget()
         self.imagen.setObjectName(u"imagen")
@@ -107,8 +110,14 @@ class Ui_Dialog(object):
 
         self.verticalLayout_3.addWidget(self.label_11)
 
+        self.verticalSpacer_6 = QSpacerItem(20, 14, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.verticalLayout_3.addItem(self.verticalSpacer_6)
+
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setVerticalSpacing(21)
+        self.gridLayout_2.setContentsMargins(-1, -1, -1, 1)
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setSpacing(8)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
@@ -257,6 +266,7 @@ class Ui_Dialog(object):
         self.label_5.setText(QCoreApplication.translate("Dialog", u"Selecciona la tabla:", None))
         self.carga_excel.setText(QCoreApplication.translate("Dialog", u"Abrir Tabla", None))
         self.pushButton_3.setText(QCoreApplication.translate("Dialog", u"Seleccionar todo", None))
+        self.pushButton.setText(QCoreApplication.translate("Dialog", u"MongoDB", None))
         self.qtab.setTabText(self.qtab.indexOf(self.tabla), QCoreApplication.translate("Dialog", u"Tabla", None))
         self.label_11.setText(QCoreApplication.translate("Dialog", u"Configuraci\u00f3n de la imagen", None))
         self.label_10.setText(QCoreApplication.translate("Dialog", u"Selecciona los campos a colocar:", None))
