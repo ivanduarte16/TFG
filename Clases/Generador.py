@@ -316,21 +316,34 @@ class Excel(QMainWindow):
         """
         self.file = QFileDialog.getOpenFileName(self, "Abrir Archivo Excel", "",
                                                 "Excel Files (*.xlsx) ;; All Files (*)")
-        self.direccion = self.file[0]
+        self.table_generate(self.file[0], 'xlsx')
+
+    def table_generate(self, direccion, tipo='csv'):
+        """
+        Función para generar una tablas
+        :param direccion:
+        :return:
+        """
+
+        self.ui_excel.tableWidget.clear()
 
         try:
-            df = pd.read_excel(self.direccion)
+            if tipo == 'xlsx':
+                df = pd.read_excel(direccion)
+            else:
+                df = pd.read_csv(direccion)
+
             columnas = list(df.columns)
             df_fila = df.to_numpy().tolist()
             x = len(columnas)
             y = len(df_fila)
 
-        # Comprobamos que el archivo seleccionados es el correcto
+            # Comprobamos que el archivo seleccionados es el correcto
         except ValueError:
             QMessageBox.about(self, 'Información', 'Formato incorrecto')
             return None
 
-        # Comprobamos que se ha seleccionados un archivo
+            # Comprobamos que se ha seleccionados un archivo
         except FileNotFoundError:
             QMessageBox.about(self, 'Información', 'No se ha seleccionados ningún archivo')
             return None

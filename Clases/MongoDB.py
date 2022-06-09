@@ -36,3 +36,10 @@ class Mongo:
         :return: Datos de todas las personas
         """
         return self.database[nombre].find()
+
+    def get_name_colletions(self):
+        name_calletions = []
+        for coll in self.database.list_collection_names():
+            name_calletions.append(coll)
+        return name_calletions
+

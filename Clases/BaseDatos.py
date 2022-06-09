@@ -1,3 +1,6 @@
+import os
+
+import pandas as pd
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QScreen
 from PySide6.QtWidgets import QMainWindow, QApplication
@@ -12,13 +15,13 @@ class BaseDatos(QMainWindow):
 
         self.setWindowTitle("Base de Datos")
 
+        self.base_datos = Ui_MainWindow()
+        self.base_datos.setupUi(self)
+
         # Importamos la clase generador del programa para poder acceder a sus variables y modificarlas
         self.main_window = generador
 
         self.db: Mongo = Mongo()
-
-        self.base_datos = Ui_MainWindow()
-        self.base_datos.setupUi(self)
 
         self.base_datos.lineEdit.textChanged.connect(self.desactivar_btn_guardar)
         self.desactivar_btn_guardar()
@@ -28,6 +31,8 @@ class BaseDatos(QMainWindow):
 
         self.base_datos.pushButton.clicked.connect(self.cargar_coleccion)
         self.base_datos.pushButton_2.clicked.connect(self.guardar_coleccion)
+
+        self.rellenar_collections()
 
         self.center()
 
@@ -39,6 +44,9 @@ class BaseDatos(QMainWindow):
         fg = self.frameGeometry()
         fg.moveCenter(centerpoint)
         self.move(fg.topLeft())
+
+    def rellenar_collections(self):
+        self.base_datos.comboBox.addItems(self.db.get_name_colletions())
 
     def desactivar_btn_guardar(self):
         if self.main_window.ui_excel.tableWidget.rowCount() == 0 or len(self.base_datos.lineEdit.text()) < 1:
@@ -54,8 +62,20 @@ class BaseDatos(QMainWindow):
             self.base_datos.pushButton.setEnabled(True)
 
     def cargar_coleccion(self):
+        lista = []
         nombre = self.base_datos.comboBox.currentText()
         col = self.db.get_all(nombre)
+        for i in col:
+            del i['_id']
+            lista.append(i)
+
+        print(lista[0])
+
+        ruta = os.path.join(self.main_window.PROJECT_FOLDER, 'test8.csv')
+        df = pd.DataFrame.from_dict(lista)
+        fichero = df.to_csv(ruta, index=False, header=True)
+        self.main_window.table_generate(ruta)
+
         # Cargar los datos en la tabla
 
     def guardar_coleccion(self):
